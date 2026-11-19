@@ -15,18 +15,22 @@
 <link rel="canonical" href="https://ccw.umjo.me/">
 <title>The Criterion Collection World</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="description" content="Explore Criterion Collection covers through what a machine sees: color, lines, type, contrast, strokes, layout and objects.">
+<meta name="description" content="Explore all 1,344 Criterion Collection covers on one zoomable map, arranged by color, people, type, composition, medium, country, year and aspect ratio.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Criterion Collection World">
 <meta property="og:title" content="The Criterion Collection World">
-<meta property="og:description" content="Explore Criterion Collection covers through what a machine sees: color, lines, type, contrast, strokes, layout and objects.">
+<meta property="og:description" content="Explore all 1,344 Criterion Collection covers on one zoomable map, arranged by color, people, type, composition, medium, country, year and aspect ratio.">
+<meta property="og:image:alt" content="Criterion Collection covers arranged on a dark grid">
 <meta property="og:url" content="https://ccw.umjo.me/">
 <meta property="og:image" content="https://ccw.umjo.me/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"The Criterion Collection World","alternateName":"CCW","url":"https://ccw.umjo.me/","description":"Explore all 1,344 Criterion Collection covers on one zoomable map, arranged by color, people, type, composition, medium, country, year and aspect ratio.","inLanguage":["en","ko"]}
+</script>
 <style>
   /* 가변 글자 크기: 폰(390px)의 값과 1440px 의 값을 잇는 직선(clamp 로 위아래를 막는다). 구간마다 끊지 않는다 */
   :root { --t1: clamp(10px, 9.6px + .095vw, 11.5px); --t2: clamp(11px, 10.6px + .095vw, 12.5px);
@@ -45,6 +49,8 @@
   html, body { margin: 0; height: 100%; background: #000; color: var(--fg);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; overflow: hidden; }
   button { font: inherit; }
+  /* 화면에는 안 보이고 검색엔진·스크린리더만 읽는 제목과 소개(#about) */
+  .vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
   /* 두 화면이 함께 쓰는 머리줄: 축 + 원본/흔적 */
   header { position: fixed; top: 0; left: 0; right: 0; height: 56px; display: flex; align-items: center;
@@ -688,6 +694,14 @@
 </style>
 </head>
 <body>
+<div class="vh" id="about">
+  <h1>The Criterion Collection World</h1>
+  <p>An unofficial fan project that lays out every cover in The Criterion Collection, spine 1 to 1344, on one zoomable map.
+  Covers are arranged by what machine analysis sees in them: color, people, typography, composition and medium,
+  or by spine number, release year, country, runtime and aspect ratio. Open a cover for its film details and neighboring covers,
+  and mark films you want to watch, are watching or have watched.</p>
+  <p>Not affiliated with The Criterion Collection. Inspired by Poster World by EPFL+ECAL Lab.</p>
+</div>
 <header>
   <button class="eye" id="eye" aria-pressed="false" aria-label="Machine view" data-key="space" data-tip="Machine view">
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -939,7 +953,7 @@ const trClr = v => LANG === 'ko' ? (CLR_KO[v] || v) : v;
 })();
 
 // 버전: 화면·동작이 바뀌면 올린다. 데이터 날짜는 build_web.py 가 META.built 에 적는다
-const VERSION = '1.16.4';
+const VERSION = '1.16.5';
 document.getElementById('ver').textContent = `v${VERSION}`;
 document.getElementById('ver').title = M.built ? `data ${M.built}` : '';
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
