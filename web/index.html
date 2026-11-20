@@ -843,7 +843,7 @@
 /* 빌드마다 바뀌는 값(data.js 크기)을 data.js 와 아틀라스 주소에 붙인다. 커버가 늘면 아틀라스 칸 순서가 바뀌는데,
    브라우저가 이전 아틀라스를 캐시에서 쓰면 칸마다 엉뚱한 커버가 그려진다 */
 window.BUILD = '';
-const SIZES = /*SIZES*/{"data.js": 1799761, "atlas/cover_s.webp": 780562}/*END*/;
+const SIZES = /*SIZES*/{"data.js": 1997442, "atlas/cover_s.webp": 780562}/*END*/;
 window.PRELOAD = {};
 window.BUILD = '?v=' + (SIZES['data.js'] || 0);
 (() => {
@@ -953,7 +953,7 @@ const trClr = v => LANG === 'ko' ? (CLR_KO[v] || v) : v;
 })();
 
 // 버전: 화면·동작이 바뀌면 올린다. 데이터 날짜는 build_web.py 가 META.built 에 적는다
-const VERSION = '1.16.5';
+const VERSION = '1.17.0';
 document.getElementById('ver').textContent = `v${VERSION}`;
 document.getElementById('ver').title = M.built ? `data ${M.built}` : '';
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -971,12 +971,9 @@ const AXES = {
   year:        { label: 'Year',        name: 'Release year' },
   country:     { label: 'Country',     name: 'Country' },
   runtime:     { label: 'Runtime',     name: 'Runtime' },
-  aspect:      { label: 'Aspect',      name: 'Aspect ratio' },
   color:       { label: 'Color',       name: 'Color' },
   people:      { label: 'People',      name: 'People' },
   type:        { label: 'Type',        name: 'Typography' },
-  composition: { label: 'Composition', name: 'Composition' },
-  medium:      { label: 'Medium',      name: 'Medium' },
   mine:        { label: 'Status', name: 'Status' },   // 표시한 커버만 상태별로(나머지는 사라진다). 격자·순회는 브라우저에서 만든다
 };
 for (const k in AXES) { AXES[k].label = tr(AXES[k].label); AXES[k].name = tr(AXES[k].name); }
@@ -1216,10 +1213,10 @@ function swapText(el, text) {
 /* ---------- 머리줄 ---------- */
 const axesEl = document.getElementById('axes'), eyeEl = document.getElementById('eye');
 KEYS.forEach((k, n) => {
-  if (n === 5 || n === 6) { const s = document.createElement('span'); s.className = 'sep'; axesEl.appendChild(s); }
+  if (k === 'color' || k === 'people') { const s = document.createElement('span'); s.className = 'sep'; axesEl.appendChild(s); }
   const b = document.createElement('button');
   b.dataset.axis = k; b.textContent = AXES[k].label;
-  b.dataset.key = `${(n + 1) % 10}`; b.dataset.tip = AXES[k].name;
+  if (k !== 'mine') b.dataset.key = `${n + 1}`; b.dataset.tip = AXES[k].name;
   axesEl.appendChild(b);
 });
 axesEl.addEventListener('click', e => { const b = e.target.closest('button'); if (b && !b.disabled) setAxis(b.dataset.axis); });
@@ -2918,8 +2915,8 @@ addEventListener('keydown', e => {
   if (c === 'Space') { e.preventDefault(); setTrace(!traceOn); return; }
   const dm = c.match(/^(?:Digit|Numpad)(\d)$/);
   if (dm) {
-    const k = KEYS[(+dm[1] + 9) % 10];
-    if (cur === null || has(cur, k)) setAxis(k);
+    const k = KEYS.filter(k => k !== 'mine')[+dm[1] - 1];   // 1 부터 차례로(Status 는 숫자 키 없음)
+    if (k && (cur === null || has(cur, k))) setAxis(k);
     return;
   }
   if (cur === null) {
